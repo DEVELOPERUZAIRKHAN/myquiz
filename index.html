@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sogdian&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <title>Quiz</title>
 </head>
@@ -23,25 +26,32 @@
                     <div class="quiz__choices">
                             <div class="quiz__choice">
                                 Obama
-                                <input value="1" type="radio" name="choice" id="choice1">
+                                <input value="1" type="radio" class="radio" name="choice" id="choice1">
+                                <i class="fa-solid fa-check check"></i>
                             </div>
                             <div class="quiz__choice">
                                 George
-                                <input value="2" type="radio" name="choice" id="choice2">
-                            </div> <div class="quiz__choice">
+                                <input value="2" type="radio" class="radio" name="choice" id="choice2">
+                                <i class="fa-solid fa-check check"></i>
+                            </div>
+                             <div class="quiz__choice">
                                 Osama
-                                <input value="3" type="radio" name="choice" id="choice3">
-                            </div> <div class="quiz__choice">
+                                <input value="3" type="radio" class="radio" name="choice" id="choice3">
+                                <i class="fa-solid fa-check check"></i>
+                            </div> 
+                            <div class="quiz__choice">
                                 Biden
-                                <input value="4" type="radio" name="choice" id="choice4">
+                                <input value="4" type="radio" class="radio" name="choice" id="choice4">
+                                <i class="fa-solid fa-check check"></i>
                             </div>
                     </div>
                     <button class="quiz__next">Next</button>
+                    <button class="quiz__restart">Restart</button>
               </div>  
         </div>
     </div>
 
-
+    <script src="https://kit.fontawesome.com/3f8d9a810b.js" crossorigin="anonymous"></script>
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

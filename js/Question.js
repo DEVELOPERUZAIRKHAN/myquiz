@@ -6,6 +6,8 @@ function Question (question,options,correct){
 
 }
 
-Question.prototype.isCorrect=(selectedOption)=>{
+Question.prototype.isCorrect=function(selectedOption){
    return selectedOption===this.correct;
 }
+
+export default Question;
