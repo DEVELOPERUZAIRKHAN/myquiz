@@ -34,14 +34,26 @@ const App = ((_) => {
   console.log(quiz);
   const listeners = () => {
     $choices.addEventListener("click", (e) => {
-      if (e.target.classList.contains("quiz__choice")) {
-        for (let item of [...$choices.children]) {
-          console.log(item);
-          item.classList.remove("active");
+      const [isChoice, isIcon] = isQuizChoice(e)
+      if (isChoice||isIcon) {
+        if(isChoice){
+          for (let item of [...$choices.children]) {
+            console.log(item,'item inside $choices event listener');
+            item.classList.remove("active");
+          }
+          e.target.classList.add("active");
+          e.target.lastElementChild.checked = true;
         }
-        e.target.classList.add("active");
-        e.target.lastElementChild.checked = true;
+        else {
+          for (let item of [...$choices.children]) {
+            console.log(item,'item inside $choices event listener');
+            item.classList.remove("active");
+          }
+          e.target.parentNode.classList.add("active");
+          e.target.parentNode.lastElementChild.checked = true;
+        }
       }
+
     });
 
     $next.addEventListener("click", () => {
@@ -93,12 +105,9 @@ ${quiz.currentQuestion().options[i]}
   const renderProgress = () => {
     let width = $progressInner.style.width;
     console.log("here is the width ", width);
-
-    
-    $progressInner.style.width = `${((quiz.currentIndex)/quiz.questions.length)*200}px`;
-
-
-  
+    $progressInner.style.width = `${
+      (quiz.currentIndex / quiz.questions.length) * 200
+    }px`;
   };
 
   const renderAll = () => {
@@ -112,10 +121,19 @@ ${quiz.currentQuestion().options[i]}
     renderQuestion("Great Job!");
     renderTracker(quiz.currentIndex, quiz.questions.length);
     renderTagLine();
-    // renderChoices();
     renderProgress();
     $next.classList.add("nonActive");
   };
+
+  const isQuizChoice=(e)=>{
+          if(e.target.classList.contains("quiz__choice")){
+            return [true,false];
+          }
+          else if(e.target.classList.contains('check')){
+            return [false,true];
+          }
+          else return [false,false];
+  }
 
   return {
     listeners,
