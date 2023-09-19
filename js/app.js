@@ -9,7 +9,6 @@ const App = ((_) => {
   const $next = document.querySelector(".quiz__next");
   const $progress = document.querySelector(".quiz__progress");
   const $progressInner = document.querySelector(".progress__inner");
-  let arr = [...$choice];
   const q1 = new Question(
     "Who is the National Poet of Pakistan?",
     ["Allama Iqbal", "Quiad-e-Azam", "Imran Khan", "Bacha Khan"],
@@ -34,26 +33,25 @@ const App = ((_) => {
   console.log(quiz);
   const listeners = () => {
     $choices.addEventListener("click", (e) => {
-      const [isChoice, isIcon] = isQuizChoice(e)
-      if (isChoice||isIcon) {
-        if(isChoice){
+      e.stopPropagation();
+      const [isChoice, isIcon, isRadio] = isQuizChoice(e);
+      if (isChoice || isIcon || isRadio) {
+        if (isChoice) {
           for (let item of [...$choices.children]) {
-            console.log(item,'item inside $choices event listener');
+            console.log(item, "item inside $choices event listener");
             item.classList.remove("active");
           }
           e.target.classList.add("active");
           e.target.lastElementChild.checked = true;
-        }
-        else {
+        } else {
           for (let item of [...$choices.children]) {
-            console.log(item,'item inside $choices event listener');
+            console.log(item, "item inside $choices event listener");
             item.classList.remove("active");
           }
           e.target.parentNode.classList.add("active");
           e.target.parentNode.lastElementChild.checked = true;
         }
       }
-
     });
 
     $next.addEventListener("click", () => {
@@ -103,11 +101,28 @@ ${quiz.currentQuestion().options[i]}
   };
 
   const renderProgress = () => {
-    let width = $progressInner.style.width;
-    console.log("here is the width ", width);
-    $progressInner.style.width = `${
-      (quiz.currentIndex / quiz.questions.length) * 200
-    }px`;
+    let width = $progressInner.offsetWidth;
+    console.log(width);
+    let newWidth=(quiz.currentIndex / quiz.questions.length) * 200;
+    console.log('here is the newWidth',newWidth)
+   let myInterval = setInterval(() => {
+      $progressInner.style.width = `${
+        (_=>{
+          console.log(width,"the width")
+          console.log(newWidth,"the new width")
+          if(width===newWidth){
+            return  clearInterval(myInterval)
+          }else if(width<newWidth){
+            width++
+            return width
+          }
+          else if(width>newWidth){
+            width--;
+            return width;
+          }
+        })()
+      }px`;
+    }, 2);
   };
 
   const renderAll = () => {
@@ -125,15 +140,15 @@ ${quiz.currentQuestion().options[i]}
     $next.classList.add("nonActive");
   };
 
-  const isQuizChoice=(e)=>{
-          if(e.target.classList.contains("quiz__choice")){
-            return [true,false];
-          }
-          else if(e.target.classList.contains('check')){
-            return [false,true];
-          }
-          else return [false,false];
-  }
+  const isQuizChoice = (e) => {
+    if (e.target.classList.contains("quiz__choice")) {
+      return [true, false, false];
+    } else if (e.target.classList.contains("check")) {
+      return [false, true, false];
+    } else if (e.target.classList.contains("radio")) {
+      return [false, false, true];
+    } else return [false, false, false];
+  };
 
   return {
     listeners,
