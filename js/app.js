@@ -1,14 +1,15 @@
 import Question from "./Question.js";
 import Quiz from "./Quiz.js";
 const App = ((_) => {
-  const $choices = document.querySelector(".quiz__choices");
-  const $choice = document.querySelectorAll(".quiz__choice");
-  const $question = document.querySelector(".quiz__question");
-  const $tracker = document.querySelector(".quiz__tracker");
-  const $tagline = document.querySelector(".quiz__tagline");
-  const $next = document.querySelector(".quiz__next");
-  const $progress = document.querySelector(".quiz__progress");
-  const $progressInner = document.querySelector(".progress__inner");
+//  dom nodes
+const $choices = document.querySelector(".quiz__choices");
+const $question = document.querySelector(".quiz__question");
+const $tracker = document.querySelector(".quiz__tracker");
+const $tagline = document.querySelector(".quiz__tagline");
+const $next = document.querySelector(".quiz__next");
+const $restart = document.querySelector(".quiz__restart");
+const $progressInner = document.querySelector(".progress__inner");
+  //  dom nodes
   const q1 = new Question(
     "Who is the National Poet of Pakistan?",
     ["Allama Iqbal", "Quiad-e-Azam", "Imran Khan", "Bacha Khan"],
@@ -21,8 +22,8 @@ const App = ((_) => {
   );
   const q3 = new Question(
     "What is the National Animal of Pakistan?",
-    ["Lion", "Tiger", "Polar Bear", "Markhor"],
-    3
+    ["Lion", "Polar Bear", "Markhor"],
+    2
   );
   const q4 = new Question(
     "When was Pakistan became Independent?",
@@ -40,10 +41,14 @@ const App = ((_) => {
           for (let item of [...$choices.children]) {
             console.log(item, "item inside $choices event listener");
             item.classList.remove("active");
+            item.lastElementChild.previousElementSibling.style.visibility='hidden';
+            console.log(item.lastElementChild.previousElementSibling)
           }
+          console.log(e.target.lastElementChild.previousElementSibling)
+          e.target.lastElementChild.previousElementSibling.style.visibility="visible";
           e.target.classList.add("active");
           e.target.lastElementChild.checked = true;
-        } else {
+        } else {    
           for (let item of [...$choices.children]) {
             console.log(item, "item inside $choices event listener");
             item.classList.remove("active");
@@ -66,6 +71,12 @@ const App = ((_) => {
         renderAll();
       }
     });
+    $restart.addEventListener("click",()=>{
+      quiz.restart();
+      renderAll()
+    $next.classList.remove("nonActive");
+    })
+
   };
 
   const renderQuestion = (question) => {
@@ -73,7 +84,13 @@ const App = ((_) => {
   };
 
   const renderTracker = (current, length) => {
+  if(quiz.ended()){
+    $tracker.innerHTML = `Complete!`;
+
+  }else{
     $tracker.innerHTML = `${current + 1} of ${length}`;
+  }
+  
   };
 
   const renderTagLine = () => {
@@ -139,7 +156,6 @@ ${quiz.currentQuestion().options[i]}
     renderProgress();
     $next.classList.add("nonActive");
   };
-
   const isQuizChoice = (e) => {
     if (e.target.classList.contains("quiz__choice")) {
       return [true, false, false];
@@ -149,12 +165,10 @@ ${quiz.currentQuestion().options[i]}
       return [false, false, true];
     } else return [false, false, false];
   };
-
   return {
     listeners,
     renderAll,
   };
 })();
-
-App.listeners();
 App.renderAll();
+App.listeners();
